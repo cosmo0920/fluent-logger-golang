@@ -148,6 +148,22 @@ func Benchmark_PostWithShortMessage(b *testing.B) {
 	}
 }
 
+func Benchmark_PostWithShortJSONString(b *testing.B) {
+	b.StopTimer()
+	f, err := New(Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	b.StartTimer()
+	data := "{\"message\": \"Hello World\"}"
+	for i := 0; i < b.N; i++ {
+		if err := f.PostJSON("tag.json", data); err != nil {
+			panic(err)
+		}
+	}
+}
+
 func Benchmark_LogWithChunks(b *testing.B) {
 	b.StopTimer()
 	f, err := New(Config{})

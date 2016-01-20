@@ -1,6 +1,7 @@
 package fluent
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -112,6 +113,15 @@ func New(config Config) (f *Fluent, err error) {
 func (f *Fluent) Post(tag string, message interface{}) error {
 	timeNow := time.Now()
 	return f.PostWithTime(tag, timeNow, message)
+}
+
+func (f *Fluent) PostJSON(tag string, jsonStr string) error {
+	timeNow := time.Now()
+	var data interface{}
+	if err := json.Unmarshal([]byte(jsonStr), &data); err != nil {
+		return err
+	}
+	return f.PostWithTime(tag, timeNow, data)
 }
 
 func (f *Fluent) PostWithTime(tag string, tm time.Time, message interface{}) error {
